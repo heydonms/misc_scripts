@@ -1,0 +1,84 @@
+<html>
+<head>
+  <title>PWSView</title>
+  <style>
+    div.Entry { padding:20px;}
+    div.Entry div.Title { font-weight: bold;}
+  </style>
+</head>
+
+
+<body>
+  <script>
+    function LoadFile() {
+
+      <!-- TODO: Check for a valid file -->
+      document.getElementById('fileform').style.display = "none";
+
+      var fileinput = document.getElementById("jsonfileinput");
+      var file = fileinput.files[0];
+      var reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = function (e) {
+        jsondata = reader.result;
+        pwsdata = JSON.parse(jsondata);
+        var outputstring = "";
+        outputdiv = document.getElementById("output");
+        for (var ndx = 0; ndx < pwsdata.length; ndx++) {
+
+          var entry = document.createElement('div');
+          entry.className = "Entry";
+
+          var title = document.createElement('div');
+          title.className = "Title"
+          title.innerHTML = pwsdata[ndx].Title;
+          entry.appendChild(title);
+
+          var username = document.createElement('div');
+          username.className = "Username"
+          username.innerHTML = "Username: " + pwsdata[ndx].UserName;
+          entry.appendChild(username);
+
+          var password = document.createElement('div');
+          password.className = "Password"
+          password.innerHTML = "Password: " + pwsdata[ndx].Password;
+          entry.appendChild(password);
+
+          if (pwsdata[ndx].URL != "" ) {
+            var description = document.createElement('div');
+            description.className = "Description"
+            description.innerHTML = "Description: " + pwsdata[ndx].Description;
+            entry.appendChild(description);
+          }
+
+          if (pwsdata[ndx].URL != "" ) {
+            var url = document.createElement('div');
+            url.className = "EntryURL"
+            url.innerHTML = "URL: <a href='" + pwsdata[ndx].URL + "'>" + pwsdata[ndx].URL + "</a>";
+            entry.appendChild(url);
+          }
+
+          outputdiv.appendChild(entry);
+
+        }
+        <!-- console.log(pwsdata); -->
+      }
+    }
+
+  </script>
+
+  <div id="fileform">
+    Select a PasswordState export file to view:<br />
+    <input type="file" id="jsonfileinput"/>
+    <input type="button" onclick="LoadFile()" value="Go" />
+  </div>
+
+  <div id="output"></div>
+  <script>
+
+
+  </script>
+</body>
+
+</html>
+
